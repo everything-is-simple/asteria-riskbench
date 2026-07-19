@@ -1,0 +1,38 @@
+# Temporary design-review artifacts
+.superpowers/
+
+# Rebuildable runtime state
+var/
+
+# Machine-local configuration and secrets
+.env
+.env.*
+!.env.example
+config/local/
+*.local.yaml
+*.local.yml
+*.secret.*
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.hypothesis/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
