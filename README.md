@@ -87,10 +87,17 @@ J:\new_tdx64\vipdoc（只读 TDX .day）
 - [聚合启动设计：治理、领域、纵切、门禁、Viewer 与 TDD](docs/superpowers/specs/2026-07-19-asteria-riskbench-bootstrap-design.md) — 保留为总览与审批形成证据；
 - [设计批准记录](docs/03-设计批准记录.md)。
 
-实施计划与施工计划进度版尚未创建；它们必须在新的门禁批准后按顺序产生。
+## 实施规划
+
+用户已批准进入实施计划阶段。当前仅建立：
+
+- [实施计划索引](docs/implementation/00-实施计划索引.md)
+- [RiskBench v0.1 实施路线图](docs/implementation/01-RiskBench-v0.1-实施路线图.md)
+
+Roadmap 当前为待审规划稿。施工计划进度版、具体任务实现计划、依赖安装、项目骨架和代码仍未授权。
 
 ## 仓库状态
 
 远端：`https://github.com/everything-is-simple/asteria-riskbench.git`
 
-当前只提交治理与设计文档。后续项目骨架、依赖选择和业务实现必须经过新的实施计划与用户门禁。
+当前只提交治理、设计和实施规划文档。后续施工计划进度版、任务实现计划、项目骨架、依赖选择和业务实现必须分别经过新的用户门禁。

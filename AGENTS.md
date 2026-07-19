@@ -206,7 +206,9 @@ v0.1 只允许：
 - 治理设计第 1–6 部分：用户已批准；
 - 六份正式设计分册：已于 2026-07-19 提交并发布到 `origin/main`；发布提交为 `7faf836184f6b120ad002c8bcdd79ed85df7fa21`；
 - 仓库治理基线：已于 2026-07-19 提交并发布到 `origin/main`；基线提交为 `bbdd6d3315d23288ee4f62e138dcf044f40a49fa`；
-- 当前门禁：等待用户审核六份正式分册，并明确批准进入实施计划；
+- `RB-GATE-002`：用户已于 2026-07-19 批准进入实施计划阶段；
+- 当前任务：`RB-PLAN-003`，只编写实施计划索引和 v0.1 Roadmap；
+- 当前下一门禁：Roadmap 发布后等待 `RB-GATE-003` 审批；
 - 正式业务项目骨架：未开始；
 - 依赖安装：未开始；
 - Data/Core/Range 实现：未开始；
@@ -214,7 +216,7 @@ v0.1 只允许：
 - 立花、个人风险、AI Observer：`design-only` / `not-started`；
 - 真实数据用途：`research_only`。
 
-下一步必须以 `docs/01-当前任务.md` 为准。任何 AI 不得因用户说“继续”就自行扩大范围，也不得把“等待批准”解释成已经获准编写实施计划。
+下一步必须以 `docs/01-当前任务.md` 为准。进入实施计划阶段只授权编写 Roadmap，不授权施工计划进度版、具体任务实现计划、依赖安装、项目骨架或代码。任何 AI 不得因用户说“继续”就自行扩大范围。
 
 ## 11. 治理文件修改规则
 
@@ -228,5 +230,7 @@ v0.1 只允许：
 - `docs/03-设计批准记录.md`
 - `docs/design/01-系统治理与文档权威链.md` 至 `docs/design/06-TDD-验证证据与首个纵切验收.md`
 - `docs/superpowers/specs/2026-07-19-asteria-riskbench-bootstrap-design.md`
+- `docs/implementation/00-实施计划索引.md`
+- `docs/implementation/01-RiskBench-v0.1-实施路线图.md`
 
 不得删除历史决策来“让文档看起来一致”；冲突必须通过新增决策记录和显式 supersedes 关系解决。
