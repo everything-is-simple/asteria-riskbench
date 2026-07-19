@@ -12,7 +12,8 @@
 2. `docs/00-索引.md`；
 3. `docs/01-当前任务.md`；
 4. 当前任务在索引中列出的权威设计、合同和决策记录；
-5. 任务涉及 MALF 或 Data 时，再读取本文件列出的 Definitive 原文。
+5. 任务涉及 MALF 或 Data 时，再读取本文件列出的 Definitive 原文；
+6. 任务进入实施规划或施工时，必须读取并遵循 [`docs/implementation/WORKFLOW-任务开发流程控制.md`](docs/implementation/WORKFLOW-任务开发流程控制.md)。
 
 若上述文件缺失、相互冲突或当前任务不明确：停止业务施工，只允许修复治理文档或请求用户裁决。
 
@@ -181,6 +182,8 @@ v0.1 只允许：
 
 ## 9. 开发方法与验收纪律
 
+所有任务必须遵循 [`docs/implementation/WORKFLOW-任务开发流程控制.md`](docs/implementation/WORKFLOW-任务开发流程控制.md)。该文件统一规定任务登记、计划批准、TDD、逐步施工记录、验证、回滚、文档收尾、Git 交付和中断恢复；它不单独授权安装依赖、建立业务骨架或实现代码。
+
 实现必须遵循 TDD：
 
 1. RED：先写与权威条款对应的失败测试；
@@ -208,6 +211,7 @@ v0.1 只允许：
 - 仓库治理基线：已于 2026-07-19 提交并发布到 `origin/main`；基线提交为 `bbdd6d3315d23288ee4f62e138dcf044f40a49fa`；
 - `RB-GATE-002`：用户已于 2026-07-19 批准进入实施计划阶段；
 - `RB-PLAN-003`：已完成并发布实施计划索引和 v0.1 Roadmap，提交为 `ba90c16`；
+- 全局任务 Workflow：`riskbench-task-workflow-v0.1` 已批准并作为治理文档发布；`RB-GOV-002` 已完成；
 - 当前下一门禁：`RB-GATE-003`，等待用户审核已发布 Roadmap；
 - 正式业务项目骨架：未开始；
 - 依赖安装：未开始；
@@ -216,7 +220,7 @@ v0.1 只允许：
 - 立花、个人风险、AI Observer：`design-only` / `not-started`；
 - 真实数据用途：`research_only`。
 
-下一步必须以 `docs/01-当前任务.md` 为准。进入实施计划阶段只授权编写 Roadmap，不授权施工计划进度版、具体任务实现计划、依赖安装、项目骨架或代码。任何 AI 不得因用户说“继续”就自行扩大范围。
+下一步必须以 `docs/01-当前任务.md` 为准。进入实施计划阶段当前仍不授权施工计划进度版、具体任务实现计划、依赖安装、项目骨架或代码；Workflow 仅作为已批准的全局治理文档。任何 AI 不得因用户说“继续”就自行扩大范围。
 
 ## 11. 治理文件修改规则
 
@@ -231,6 +235,7 @@ v0.1 只允许：
 - `docs/design/01-系统治理与文档权威链.md` 至 `docs/design/06-TDD-验证证据与首个纵切验收.md`
 - `docs/superpowers/specs/2026-07-19-asteria-riskbench-bootstrap-design.md`
 - `docs/implementation/00-实施计划索引.md`
-- `docs/implementation/01-RiskBench-v0.1-实施路线图.md`
+- `docs/implementation/01-RiskBench-v0.1-实施路线图.md`；
+- `docs/implementation/WORKFLOW-任务开发流程控制.md`
 
 不得删除历史决策来“让文档看起来一致”；冲突必须通过新增决策记录和显式 supersedes 关系解决。
