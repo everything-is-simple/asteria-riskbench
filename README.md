@@ -73,8 +73,21 @@ J:\new_tdx64\vipdoc（只读 TDX .day）
 
 ## 正式设计
 
-- [启动设计：治理、领域、纵切、门禁、Viewer 与 TDD](docs/superpowers/specs/2026-07-19-asteria-riskbench-bootstrap-design.md)
-- [设计批准记录](docs/03-设计批准记录.md)
+以下六份分册共同构成 **RiskBench v0.1 已批准设计基线**，也是日常引用入口：
+
+1. [系统治理与文档权威链](docs/design/01-系统治理与文档权威链.md)
+2. [领域架构与子系统边界](docs/design/02-领域架构与子系统边界.md)
+3. [MALF v2.0 透明多周期坐标](docs/design/03-MALF-v2.0-透明多周期坐标.md)
+4. [数据质量、分级门禁、新鲜度与审计](docs/design/04-数据质量-分级门禁-新鲜度与审计.md)
+5. [最小只读工作台、运行边界与可逆发布](docs/design/05-最小只读工作台-运行边界与可逆发布.md)
+6. [TDD、验证证据与首个纵切验收](docs/design/06-TDD-验证证据与首个纵切验收.md)
+
+辅助治理材料：
+
+- [聚合启动设计：治理、领域、纵切、门禁、Viewer 与 TDD](docs/superpowers/specs/2026-07-19-asteria-riskbench-bootstrap-design.md) — 保留为总览与审批形成证据；
+- [设计批准记录](docs/03-设计批准记录.md)。
+
+实施计划与施工计划进度版尚未创建；它们必须在新的门禁批准后按顺序产生。
 
 ## 仓库状态
 

@@ -45,11 +45,13 @@
 1. 用户在仓库中明确批准并提交的治理决策；
 2. 本 `AGENTS.md` 的施工与安全约束；
 3. `docs/02-权威来源登记.md` 中登记并校验哈希的 Definitive 文档；
-4. `docs/superpowers/specs/2026-07-19-asteria-riskbench-bootstrap-design.md`；
-5. `docs/03-设计批准记录.md`；
-6. `docs/01-当前任务.md`；
-7. 参考仓库的历史实现和测试；
-8. 临时浏览器草图、聊天记录和未提交附件。
+4. `docs/design/01-系统治理与文档权威链.md` 至 `docs/design/06-TDD-验证证据与首个纵切验收.md` 六份正式分册；
+5. `docs/superpowers/specs/2026-07-19-asteria-riskbench-bootstrap-design.md` 聚合总览与审批形成证据；
+6. `docs/03-设计批准记录.md`；
+7. `docs/01-当前任务.md`；
+8. 已批准的实施计划、代码与测试证据；
+9. 参考仓库的历史实现和测试；
+10. 临时浏览器草图、聊天记录和未提交附件。
 
 说明：MALF 的领域语义以 Definitive v2.0 为最高权威；`AGENTS.md` 负责规定如何安全施工，不得改写 MALF 领域含义。
 
@@ -202,8 +204,9 @@ v0.1 只允许：
 ## 10. 当前系统状态
 
 - 治理设计第 1–6 部分：用户已批准；
+- 六份正式设计分册：已形成，正在执行 `RB-DOC-002` 发布任务；
 - 仓库治理基线：已于 2026-07-19 提交并发布到 `origin/main`；基线提交为 `bbdd6d3315d23288ee4f62e138dcf044f40a49fa`；
-- 当前门禁：等待用户审核正式设计并明确批准进入实施计划；
+- 当前门禁：先完成正式设计分册发布；发布后等待用户审核并明确批准进入实施计划；
 - 正式业务项目骨架：未开始；
 - 依赖安装：未开始；
 - Data/Core/Range 实现：未开始；
@@ -223,6 +226,7 @@ v0.1 只允许：
 - `docs/01-当前任务.md`
 - `docs/02-权威来源登记.md`
 - `docs/03-设计批准记录.md`
+- `docs/design/01-系统治理与文档权威链.md` 至 `docs/design/06-TDD-验证证据与首个纵切验收.md`
 - `docs/superpowers/specs/2026-07-19-asteria-riskbench-bootstrap-design.md`
 
 不得删除历史决策来“让文档看起来一致”；冲突必须通过新增决策记录和显式 supersedes 关系解决。
