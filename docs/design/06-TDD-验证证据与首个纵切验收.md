@@ -1,11 +1,11 @@
 # 设计第 6 部分：TDD、验证证据与首个纵切验收
 
-- 文档状态：`approved / design-only`
-- 基线版本：`riskbench-design-v0.1`
+- 文档状态：`approved / extended-by-RB-GATE-004`
+- 基线版本：`riskbench-design-v0.1 + product-realignment-v0.1`
 - 批准日期：`2026-07-19`
 - 精度合同澄清：`2026-07-20 / RB-CLARIFY-001`
-- 上游设计：分册 02–05
-- 下一阶段：获得独立批准后编写实施计划；本分册不授权业务实现
+- 上游设计：分册 02–05、[`07-产品重定位与每日风险闭环.md`](07-产品重定位与每日风险闭环.md)
+- 下一门禁：`RB-TECH-002 / waiting-for-technology-selection-approval`；本分册不授权业务实现
 
 ## 1. 验证目标
 
@@ -287,10 +287,71 @@ Definitive 原文
 - Probability 资格不足时保持未验证；
 - 本文不被解释为已授权编写代码。
 
-## 13. 下一门禁
+## 13. 历史门禁说明
 
-六份正式设计分册提交并由用户审核后，下一批准点才是：
+本分册原来的“进入实施计划阶段”门禁已经由 `RB-GATE-002` 完成，旧 Roadmap 也曾由 `RB-GATE-003` 批准。`RB-GATE-004` 后，旧 Roadmap 被 `riskbench-roadmap-v0.2` supersede，旧任务 `RB-M01-T01` 状态为 `suspended-by-RB-GATE-004`。
 
-> 批准进入实施计划阶段，只编写精确文件、测试、命令、提交点和回滚步骤；该批准不等于批准安装依赖或开始业务实现。
+本分册保留的 Data、聚合、MALF、G0–G3、发布、Viewer 和回退验证要求全部继续有效，不得因产品重定位、减少行政审批或追求更快可用而降低正确性标准。
 
-实施计划获得再次批准后，才能建立项目骨架和执行 TDD 实现。后续另建“施工计划进度版”持续记录计划项、依赖、状态、验证证据和提交哈希。
+## 14. V7——用户资产、事务与备份恢复
+
+必须验证：
+
+- `ExposureDeclaration` 仅接受五只 ETF 的非负整数 bps；
+- ETF 暴露总和大于 `10000` 时拒绝；
+- `cash_bps = 10000 - sum(etf_exposure_bps)` 由确定性代码计算；
+- 每次声明必须有明确 `as_of`；无声明为 `unknown`，不得补零或 `neutral`；
+- 所有用户修改追加新 revision，旧 revision 不变；
+- 事务失败不留下半 revision；
+- 第二个写入进程拿不到 `state/workbench.lock` 的 OS 独占锁时拒绝启动；
+- 进程崩溃后 OS 锁释放，残留锁文件不永久阻塞；
+- 删除或重建 `var/` 不改变 `state/`；
+- `state/` 损坏时停止写入，不静默创建空库；
+- 破坏性迁移前产生并验证本地备份；
+- 本地备份可恢复用户 revision 和审计关系；
+- v0.1 不验收通用导出或跨机器迁移包。
+
+## 15. V8——确定性风险与 AI 隔离
+
+必须验证：
+
+- 风险边界、命中状态和边界距离只由确定性规则计算；
+- AI 输出单独保存为 `AIInterpretation`，并保留输入引用、时间、Provider 身份和 revision；
+- AI 不修改市场快照、usage、freshness、MALF、G0–G3、用户声明或确定性 assessment；
+- AI 不把 `unknown` 改写为 `neutral`、安全或建议持有；
+- AI 不输出买卖、仓位、订单、自动交易或收益承诺；
+- AI 禁用、超时、失败或移除时，每日确定性闭环仍可完成；
+- AI 失败不会损坏 `state/` 或覆盖既有 revision。
+
+## 16. V9——响应式每日闭环与网络红线
+
+R6 只允许：
+
+- 浏览器设备模拟；
+- Playwright 等自动化 viewport；
+- 同机浏览器窗口尺寸调整；
+- 对手机、平板、桌面布局进行响应式验收。
+
+R6 明确不允许真机跨设备访问。必须验证：
+
+- 服务只监听 `127.0.0.1`；
+- 未监听 `0.0.0.0`、局域网 IP 或公网地址；
+- 响应式测试不需要外部网络；
+- `physical-device-network-access`、`LAN binding`、`tunnel/public access` 均保持 forbidden；
+- 浏览器刷新不触发 TDX 读取、MALF 计算或快照重建；
+- 每日闭环在规定 viewport 下可完成，并持续显示数据日期、freshness、usage、三层权威标识和 `unknown` 原因。
+
+## 17. 扩展追踪矩阵与下一门禁
+
+关键合同至少建立以下追踪 ID：
+
+| 验证域 | 追踪前缀 | 证据重点 |
+|---|---|---|
+| 市场事实 | `RB-V1`–`RB-V6` | 原六层 Data/MALF/门禁/发布/Viewer 正确性 |
+| 用户资产 | `RB-V7` | revision、事务、锁、`var/`／`state/`、备份恢复 |
+| 风险与 AI | `RB-V8` | 确定性计算、AI 隔离、故障可拔除 |
+| 响应式闭环 | `RB-V9` | 同机 viewport、loopback-only、完整每日流程 |
+
+下一门禁是：
+
+> **`RB-TECH-002 / waiting-for-technology-selection-approval`：只审核候选技术、组件与工厂证据；未获批准前不得安装主系统依赖、建立项目骨架或开始实现。**

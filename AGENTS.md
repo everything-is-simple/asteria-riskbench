@@ -23,12 +23,20 @@
 - 中文名：**Asteria 个人风险工作台**。
 - 仓库目录：`J:\asteria-riskbench`。
 - 远端仓库：`https://github.com/everything-is-simple/asteria-riskbench.git`。
-- 一句话定义：使用本地市场数据，为个人交易者发布可追溯的 ETF 多周期市场结构与风险观察快照的本地只读工作台。
+- 一句话定义：使用本地市场数据，为个人交易者提供可追溯市场事实、相对暴露声明、确定性风险边界、风险笔记和可选 AI 解读的本地个人风险工作台。
+
+系统采用三层权威：
+
+1. **市场事实**：TDX、MALF、G0–G3 与不可变发布快照；
+2. **用户声明**：相对暴露、风险边界、风险状态、笔记和行动预案；
+3. **AI 解读**：只解释、总结和提醒矛盾，不修改前两层。
 
 本系统首先回答：
 
 - 数据来自哪里、截止哪一天、是否过期；
 - 月、周、日各自处于什么 MALF 结构状态；
+- 用户在明确 `as_of` 下声明了什么相对暴露和风险边界；
+- 确定性规则计算出的边界状态与距离是什么；
 - 哪些字段尚未形成，以及原因是什么；
 - 当前结果经过了哪些规则、门禁和审计步骤。
 
@@ -36,8 +44,9 @@
 
 - 应该买什么、卖什么或买多少；
 - 胜率、收益预测、综合交易分；
-- 自动下单、生产仓位或 PnL；
-- 用 AI 替代硬风险边界。
+- 券商账户、订单、成交、真实仓位或 PnL；
+- 自动下单或自动交易；
+- 用 AI 计算、修改或控制风险数值。
 
 ## 2. 文档和语义权威链
 
@@ -46,7 +55,7 @@
 1. 用户在仓库中明确批准并提交的治理决策；
 2. 本 `AGENTS.md` 的施工与安全约束；
 3. `docs/02-权威来源登记.md` 中登记并校验哈希的 Definitive 文档；
-4. `docs/design/01-系统治理与文档权威链.md` 至 `docs/design/06-TDD-验证证据与首个纵切验收.md` 六份正式分册；
+4. `docs/design/01-系统治理与文档权威链.md` 至 `docs/design/07-产品重定位与每日风险闭环.md` 七份正式分册；
 5. `docs/superpowers/specs/2026-07-19-asteria-riskbench-bootstrap-design.md` 聚合总览与审批形成证据；
 6. `docs/03-设计批准记录.md`；
 7. `docs/01-当前任务.md`；
@@ -172,16 +181,46 @@ v0.1 只允许：
 
 ## 8. 运行和写入边界
 
+### 8.1 市场派生数据 `var/`
+
+```text
+var/
+├── staging/
+├── published/
+└── current.json
+```
+
+- `var/` 只保存可删除、可重建的派生数据，不进入 Git；
+- Viewer 只读取 `var/published/` 与原子 `current.json` 指针，不读取 TDX，不计算 MALF；
+- 发布采用不可变 snapshot；禁止静默回退，回退必须显式、可审计；
+- 删除或重建 `var/` 不得触碰 `state/`。
+
+### 8.2 用户不可再生资产 `state/`
+
+```text
+state/
+├── workspace data
+├── backups/
+└── workbench.lock
+```
+
+- `state/` 保存用户声明、边界、风险状态、笔记、AI 解读和备份，不进入 Git；
+- 所有修改追加新的不可变 revision，禁止原地覆盖；
+- 写入必须事务化；损坏时停止写入，禁止静默创建空库；
+- 破坏性迁移前必须备份；v0.1 只做本地备份／恢复，不做通用迁移包；
+- 写入进程必须对 `state/workbench.lock` 获取操作系统级独占锁；锁文件中的 PID、启动时间和实例 ID 只用于诊断，残留文件不得永久阻塞。
+
+### 8.3 服务与网络边界
+
 - 外部目录全部只读；
-- 新系统只允许写入仓库自身受控文件，以及运行期 `var/`；
-- `var/` 可删除、可重建，不进入 Git；
-- Viewer 只读取已发布快照，不读取 TDX，不计算 MALF；
-- Viewer 仅绑定 `127.0.0.1`，保持 GET/HEAD-only；
+- 市场快照 Viewer 仅绑定 `127.0.0.1`，保持 GET/HEAD-only；
+- 工作站中的用户工作区可以按批准合同写入 `state/`，但不得因此让 Viewer 重算市场事实；
+- 手机／平板／桌面只做浏览器设备模拟、同机窗口或自动化 viewport 响应式验收；
+- 真机跨设备访问、LAN 绑定、隧道、公网、小主机和云部署在 v0.1 中禁止；
+- 禁止将监听地址改为 `0.0.0.0`、局域网 IP 或公网地址；
 - 禁止后台 scheduler、文件 watcher、自动重算、遥测和公网依赖；
 - 不得将机器本地路径或秘密写入浏览器 `localStorage`；
-- 不建设可写设置中心；
-- 发布采用不可变 snapshot 和原子 `current.json` 指针；
-- 禁止静默回退，回退必须显式、可审计。
+- 不建设可写设置中心。
 
 ## 9. 开发方法与验收纪律
 
@@ -228,26 +267,22 @@ Viewer 只读已发布快照；
 
 ## 11. 当前系统状态
 
-- 治理设计第 1–6 部分：用户已批准；
-- 六份正式设计分册：已于 2026-07-19 提交并发布到 `origin/main`；发布提交为 `7faf836184f6b120ad002c8bcdd79ed85df7fa21`；
-- 仓库治理基线：已于 2026-07-19 提交并发布到 `origin/main`；基线提交为 `bbdd6d3315d23288ee4f62e138dcf044f40a49fa`；
-- `RB-GATE-002`：用户已于 2026-07-19 批准进入实施计划阶段；
-- `RB-PLAN-003`：已完成并发布实施计划索引和 v0.1 Roadmap，提交为 `ba90c16`；
-- 全局任务 Workflow：`riskbench-task-workflow-v0.1` 已批准并作为治理文档发布；`RB-GOV-002` 已完成；
-- 工程技术治理：`RB-TECH-001` 和 `RB-DEPLOY-001` 已批准并作为治理文档发布；`RB-GOV-003` 已完成；
-- `RB-CLARIFY-001`：ETF 原始整数 fixed-point 精度合同已澄清；`tick_size` 不进入 v0.1 运行字段，`RB-M03-T01` 必须证明该 adapter 不等价于 Definitive `round(2)` 策略；
-- `RB-GATE-003`：用户已于 2026-07-19 批准已发布 Roadmap；
-- 当前下一门禁：`RB-M01-T01 / waiting-for-task-plan-approval`；
-- 施工计划进度版：已创建；
-- `RB-M01-T01` 任务实现计划：已创建草案，等待批准；
+- 治理设计第 1–6 部分：用户已批准并发布；
+- `RB-GATE-004`：用户已于 2026-07-20 批准产品重定位；
+- 设计第 7 部分：`approved / design-only`，作为产品范围、三层权威、`var/`／`state/` 和每日风险闭环的正式依据；
+- `riskbench-roadmap-v0.2`：产品重定位后的当前 Roadmap；原 `riskbench-roadmap-v0.1-draft.1` 保留历史但已被 supersede；
+- `riskbench-task-workflow-v0.2`：当前任务与里程碑治理流程；
+- `RB-M01-T01`：`suspended-by-RB-GATE-004`，历史计划保留但不得执行；
+- 当前 Roadmap：R0 文档重定位完成，R1 等待技术选型；
+- 下一门禁：`RB-TECH-002 / waiting-for-technology-selection-approval`；
+- 三份技术研究草案：保持 untracked、non-authoritative、not-selected，不得作为安装或实施依据；
 - 正式业务项目骨架：未开始；
 - 依赖安装：未开始；
-- Data/Core/Range 实现：未开始；
-- Lifespan/Probability 实现：未开始；
-- 立花、个人风险、AI Observer：`design-only` / `not-started`；
-- 真实数据用途：`research_only`。
+- Data/Core/Range、个人风险、笔记、AI 和 Viewer 实现：未开始；
+- 真实数据用途：`research_only`；`operational` 禁用；
+- 临时审阅服务 `127.0.0.1:63840` 只作为设计审阅证据，不纳入正式运行体系。
 
-下一步必须以 `docs/01-当前任务.md` 为准。Roadmap 获批后已授权创建施工计划进度版和首个任务实现计划草案；当前仍不授权任务实施、依赖安装、项目骨架或代码。任何 AI 不得因用户说“继续”就自行扩大范围。
+下一步必须以 `docs/01-当前任务.md` 为准。任何 AI 不得因用户说“继续”就自行扩大范围，也不得恢复执行已暂停的 `RB-M01-T01`。
 
 ## 12. 治理文件修改规则
 
@@ -259,10 +294,12 @@ Viewer 只读已发布快照；
 - `docs/01-当前任务.md`
 - `docs/02-权威来源登记.md`
 - `docs/03-设计批准记录.md`
-- `docs/design/01-系统治理与文档权威链.md` 至 `docs/design/06-TDD-验证证据与首个纵切验收.md`
+- `docs/design/01-系统治理与文档权威链.md` 至 `docs/design/07-产品重定位与每日风险闭环.md`
 - `docs/superpowers/specs/2026-07-19-asteria-riskbench-bootstrap-design.md`
 - `docs/implementation/00-实施计划索引.md`
 - `docs/implementation/01-RiskBench-v0.1-实施路线图.md`；
+- `docs/implementation/02-施工计划进度版.md`；
+- `docs/implementation/tasks/` 下的任务实现计划；
 - `docs/implementation/WORKFLOW-任务开发流程控制.md`
 - `docs/implementation/TECH-工程技术选型、开源组件、调试与装配治理.md`
 - `docs/implementation/DEPLOYMENT-前后端边界与部署演进治理.md`
