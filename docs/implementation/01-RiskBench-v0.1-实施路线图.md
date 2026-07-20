@@ -1,13 +1,14 @@
 # RiskBench v0.1 实施路线图
 
-- 文档状态：`draft / awaiting-roadmap-approval`
+- 文档状态：`approved / roadmap-baseline`
 - 路线图版本：`riskbench-roadmap-v0.1-draft.1`
 - 编制日期：`2026-07-19`
 - 当前规划任务：`RB-PLAN-003`
 - 上游设计基线：`riskbench-design-v0.1`
 - 上游批准：`RB-GATE-002 / approved`
-- 下一门禁：`RB-GATE-003 / waiting-for-roadmap-approval`
-- 实现状态：`not-started`
+- Roadmap 门禁：`RB-GATE-003 / approved`
+- 下一门禁：`RB-M01-T01 / waiting-for-task-plan-approval`
+- 实现状态：`not-started / plan-only`
 
 > 本文是 Roadmap、结构化任务清单、依赖图和验收门禁，不是业务实现计划的批准，不授权安装依赖、创建业务骨架或编写代码。
 
@@ -200,7 +201,7 @@ flowchart LR
 
 | 任务 ID | 任务 | depends_on | 正式设计来源 | 主要交付物 | 验证层级 | 完成定义 | 状态 |
 |---|---|---|---|---|---|---|---|
-| `RB-M03-T01` | ETF fixed-point adapter 与严格比较 | `RB-M02-T03` | D03 §6–§7；D06 §8 | `malf-v2.0-etf-tick-v0.1`、整数比较、展示缩放边界 | V3 | Pivot/Guard/Break 只用 `<`/`>`；相等不触发；禁止 binary float 和临时 round | `planned` |
+| `RB-M03-T01` | ETF fixed-point adapter 与严格比较 | `RB-M02-T03` | D03 §6–§7；D06 §8 | `malf-v2.0-etf-tick-v0.1`、`source_integer_fixed_point-v0.1`、整数比较、展示缩放与非等价性审计边界 | V3 | Pivot/Guard/Break 只用 `<`/`>`；相等不触发；禁止 binary float/临时 round；不引入 exchange `tick_size` 字段或 quantize；快照明确为非 Definitive `round(2)` 等价的 research adapter variant | `planned` |
 | `RB-M03-T02` | MALF Core 状态机 | `RB-M03-T01` | D03 §1、§8.1；D06 §5 V3、§6 | Pivot、Guard、Break、Wave 事件与状态，人工 golden fixtures | V3 | 每个边界事件可追踪到 Definitive 条款；无前视；预期非实现自生成 | `planned` |
 | `RB-M03-T03` | MALF Range 状态机 | `RB-M03-T02` | D03 §8.2；D06 §5 V3、§6–§7 | Range 形成、延续、终止和未形成状态 | V3 | Range 只消费 Core 正式输出；状态转换有 golden 事件序列；未知保持 None | `planned` |
 | `RB-M03-T04` | 月/周/日快照与透明组合 | `RB-M03-T03`,`RB-M02-T04` | D02 §5–§8；D03 §3–§5、§8–§10 | 三个独立不可变 `WaveProbabilitySnapshot`、组合 `MultiTimeframeRiskCoordinateSnapshot` | V3/V4 | 应用层只组合不重算；Lifespan/Probability 保持 None+reason；无 27 桶、总分或建议 | `planned` |
@@ -363,15 +364,19 @@ Roadmap 批准后：
 
 ## 18. Roadmap 批准后的第一个动作
 
-若 `RB-GATE-003` 获得批准，下一步只能：
+`RB-GATE-003` 已获得批准。已按批准范围完成：
 
 1. 创建 `docs/implementation/02-施工计划进度版.md`；
 2. 将本 Roadmap 的 6 个里程碑和 21 个任务登记为 `planned`；
-3. 编写第一个任务 `RB-M01-T01` 的任务实现计划；
-4. 提交该任务计划供用户审核。
+3. 编写第一个任务 `RB-M01-T01` 的任务实现计划草案；
+4. 将该任务计划置为 `waiting-for-plan-approval`，提交独立审核。
 
 这仍不等于批准 `RB-M01-T01` 实施。
 
-## 19. 本 Roadmap 的唯一批准点
+## 19. Roadmap 批准记录
 
-> **是否批准 `riskbench-roadmap-v0.1-draft.1`：采用 RB-M01 至 RB-M06 六个里程碑、21 个稳定任务、逐任务实现计划、逐任务审批、TDD 证据闭环和里程碑门禁；批准后只创建施工计划进度版并编写 `RB-M01-T01` 任务实现计划，不安装依赖、不创建业务骨架、不实现代码？**
+用户已批准 `riskbench-roadmap-v0.1-draft.1`：采用 `RB-M01` 至 `RB-M06` 六个里程碑、21 个稳定任务、逐任务实现计划、逐任务审批、TDD 证据闭环和里程碑门禁。
+
+批准日期：`2026-07-19`。
+
+批准后仅允许创建施工计划进度版并编写 `RB-M01-T01` 任务实现计划；不授权安装依赖、创建业务骨架或实现代码。

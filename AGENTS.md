@@ -145,9 +145,12 @@ MALF 正式全称：**Market Analysis Logical Framework**。
 - 禁止 `bucket_id`、综合分、胜率、买卖建议、仓位、订单和 PnL；
 - 当前 TDX `raw_none` ETF 使用来源原始整数价格严格比较；
 - `price_scale=1000` 只用于展示；
+- 当前比较域版本为 `source_integer_fixed_point-v0.1`；`/1000` 展示转换不得进入结构计算；
+- v0.1 不读取、保存或校验交易所 `tick_size`，也不进行 tick-size quantize；
 - 禁止 binary float 和临时 `round(2)`；
 - Pivot、Guard、Break 使用严格 `<` / `>`，相等不触发；
 - adapter 版本固定为 `malf-v2.0-etf-tick-v0.1`；
+- 该 adapter 是 `raw_none / research_only` 的 RiskBench variant，不得宣称为 MALF Definitive `round(2)` 精度策略的等价实现；
 - 该 adapter 不修改 Definitive 原文；未来 `qfq_back` 必须另立精度合同并重新审批；
 - TDX `.day` 记录长度为 32 字节，解析布局为 `<5If2I`，最后两个字段按 unsigned 读取；
 - 结构性坏记录必须整只标的拒绝，禁止跳过坏 bar。
@@ -232,7 +235,11 @@ Viewer 只读已发布快照；
 - `RB-PLAN-003`：已完成并发布实施计划索引和 v0.1 Roadmap，提交为 `ba90c16`；
 - 全局任务 Workflow：`riskbench-task-workflow-v0.1` 已批准并作为治理文档发布；`RB-GOV-002` 已完成；
 - 工程技术治理：`RB-TECH-001` 和 `RB-DEPLOY-001` 已批准并作为治理文档发布；`RB-GOV-003` 已完成；
-- 当前下一门禁：`RB-GATE-003`，等待用户审核已发布 Roadmap；
+- `RB-CLARIFY-001`：ETF 原始整数 fixed-point 精度合同已澄清；`tick_size` 不进入 v0.1 运行字段，`RB-M03-T01` 必须证明该 adapter 不等价于 Definitive `round(2)` 策略；
+- `RB-GATE-003`：用户已于 2026-07-19 批准已发布 Roadmap；
+- 当前下一门禁：`RB-M01-T01 / waiting-for-task-plan-approval`；
+- 施工计划进度版：已创建；
+- `RB-M01-T01` 任务实现计划：已创建草案，等待批准；
 - 正式业务项目骨架：未开始；
 - 依赖安装：未开始；
 - Data/Core/Range 实现：未开始；
@@ -240,7 +247,7 @@ Viewer 只读已发布快照；
 - 立花、个人风险、AI Observer：`design-only` / `not-started`；
 - 真实数据用途：`research_only`。
 
-下一步必须以 `docs/01-当前任务.md` 为准。进入实施计划阶段当前仍不授权施工计划进度版、具体任务实现计划、依赖安装、项目骨架或代码；Workflow 仅作为已批准的全局治理文档。任何 AI 不得因用户说“继续”就自行扩大范围。
+下一步必须以 `docs/01-当前任务.md` 为准。Roadmap 获批后已授权创建施工计划进度版和首个任务实现计划草案；当前仍不授权任务实施、依赖安装、项目骨架或代码。任何 AI 不得因用户说“继续”就自行扩大范围。
 
 ## 12. 治理文件修改规则
 

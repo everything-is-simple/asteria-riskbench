@@ -3,6 +3,7 @@
 - 文档状态：`approved / design-only`
 - 基线版本：`riskbench-design-v0.1`
 - 批准日期：`2026-07-19`
+- 精度合同澄清：`2026-07-20 / RB-CLARIFY-001`
 - 上游设计：分册 02–05
 - 下一阶段：获得独立批准后编写实施计划；本分册不授权业务实现
 
@@ -209,6 +210,10 @@ Definitive 原文
 - 相同整数价格不触发严格突破；
 - 日/周/月聚合保持同一 price_scale；
 - 全链路不经过 binary float；
+- 结构计算输入只能是 `source_integer_fixed_point` 整数域；`/1000` 展示转换不得回流到计算；
+- v0.1 不读取、不保存、不校验 exchange `tick_size`，也不进行 tick-size quantize；
+- 发布结果的 `rule_versions` 同时包含 `malf-v2.0-etf-tick-v0.1` 和 `source_integer_fixed_point-v0.1`；任一缺失即 G3 拒绝；
+- 对同一 fixture 分别展示 `round(2)` 和来源整数域的不同结果，证明当前 adapter 是非等价的 research adapter variant，而不是 Definitive O3 的等价实现；
 - `raw_none` adapter 通过不代表 `qfq_back` 精度合同已验证；
 - 未来 qfq_back 使用独立 fixture、规则版本和审批记录。
 
